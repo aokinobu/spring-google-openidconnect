@@ -5,6 +5,8 @@ import static org.springframework.security.oauth2.common.AuthenticationScheme.fo
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +22,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @Configuration
 @EnableOAuth2Client
 public class OAuth2Client {
-    @Value("${google.oauth2.clientId}")
+	static final Logger logger = LoggerFactory.getLogger(OpenIDConnectAuthenticationFilter.class);
+	
+	@Value("${google.oauth2.clientId}")
     private String clientId;
 
     @Value("${google.oauth2.clientSecret}")
@@ -29,6 +33,7 @@ public class OAuth2Client {
     @Bean
     // TODO retrieve from https://accounts.google.com/.well-known/openid-configuration ?
     public OAuth2ProtectedResourceDetails googleOAuth2Details() {
+   	 	logger.debug("clientId:>" + clientId + "<");
         AuthorizationCodeResourceDetails googleOAuth2Details = new AuthorizationCodeResourceDetails();
         googleOAuth2Details.setAuthenticationScheme(form);
         googleOAuth2Details.setClientAuthenticationScheme(form);
@@ -36,7 +41,7 @@ public class OAuth2Client {
         googleOAuth2Details.setClientSecret(clientSecret);
         googleOAuth2Details.setUserAuthorizationUri("https://accounts.google.com/o/oauth2/auth");
         googleOAuth2Details.setAccessTokenUri("https://www.googleapis.com/oauth2/v3/token");
-        googleOAuth2Details.setScope(asList("openid"));
+        googleOAuth2Details.setScope(asList("email"));
         return googleOAuth2Details;
     }
 
@@ -49,4 +54,22 @@ public class OAuth2Client {
     public OAuth2RestOperations googleOAuth2RestTemplate() {
         return new OAuth2RestTemplate(googleOAuth2Details(), oAuth2ClientContext);
     }
+    
+//    @Bean
+//    @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
+//    public OAuth2RestOperations googleOAuth2RestTemplate() {
+//    	OAuth2RestTemplate temp = new OAuth2RestTemplate(googleOAuth2Details(), oAuth2ClientContext);
+//    	AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(Arrays.<AccessTokenProvider> asList(
+//    			new AuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(),
+//    			new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+////    	accessTokenProvider.setClientTokenServices(clientTokenServices());
+//    	temp.setAccessTokenProvider(accessTokenProvider);
+//        return temp; 
+//    }
+    
+//	@Bean
+//	public ClientTokenServices clientTokenServices() {
+//
+//		return new JdbcClientTokenServices(null);
+//	}
 }

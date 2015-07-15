@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +21,8 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+	static final Logger logger = LoggerFactory.getLogger(OpenIDConnectAuthenticationFilter.class);
+	
     @Resource
     private OAuth2RestOperations restTemplate;
 
@@ -30,7 +34,9 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
+   	 	logger.debug("checking with google from:>" + request.getRequestURI() + "<");
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
+   	 	logger.debug("UserInfo:>", userInfoResponseEntity);
         return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
     }
 }
