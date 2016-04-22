@@ -45,7 +45,6 @@ public class OAuth2Client {
         return googleOAuth2Details;
     }
 
-    @SuppressWarnings("SpringJavaAutowiringInspection") // Provided by Spring Boot
     @Resource
     private OAuth2ClientContext oAuth2ClientContext;
 

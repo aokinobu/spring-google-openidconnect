@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
@@ -24,15 +23,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new LoginUrlAuthenticationEntryPoint(LOGIN_URL);
     }
     
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-    	return new RdfAuthenticationSuccessHandler();
-    }
+//    @Bean
+//    public AuthenticationSuccessHandler successHandler() {
+//    	return new RdfAuthenticationSuccessHandler();
+//    }
 
     @Bean
     public OpenIDConnectAuthenticationFilter openIdConnectAuthenticationFilter() {
     	OpenIDConnectAuthenticationFilter open = new OpenIDConnectAuthenticationFilter(LOGIN_URL);
-    	open.setAuthenticationSuccessHandler(successHandler());
+//    	open.setAuthenticationSuccessHandler(successHandler());
         return open;
     }
 
@@ -49,4 +48,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/").permitAll()
                 .antMatchers(GET, "/test").authenticated();
     }
+    
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//      http.authorizeRequests()
+//        .antMatchers("/", "/home").access("hasRole('USER')")
+//        .antMatchers("/admin/**").access("hasRole('ADMIN')")
+//        .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+//        .and().formLogin().loginPage("/login").successHandler(customSuccessHandler)
+//        .usernameParameter("ssoId").passwordParameter("password")
+//        .and().csrf()
+//        .and().exceptionHandling().accessDeniedPage("/Access_Denied");
+//    }
+//    @Autowired
+//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
+//        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");
+//    }
 }

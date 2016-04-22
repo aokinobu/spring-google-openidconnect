@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
@@ -36,7 +37,13 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
             throws AuthenticationException, IOException, ServletException {
    	 	logger.debug("checking with google from:>" + request.getRequestURI() + "<");
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
+        
+        OAuth2AccessToken token = restTemplate.getAccessToken();
+        
+        logger.debug("Token:>" + token.getValue());
+        logger.debug("token object:" + token);
    	 	logger.debug("UserInfo:>", userInfoResponseEntity);
+   	 	
         return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
     }
 }
