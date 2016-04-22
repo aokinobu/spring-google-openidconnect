@@ -27,7 +27,7 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
     @Resource
     private OAuth2RestOperations restTemplate;
 
-    protected OpenIDConnectAuthenticationFilter(String defaultFilterProcessesUrl) {
+    public OpenIDConnectAuthenticationFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
         setAuthenticationManager(authentication -> authentication); // AbstractAuthenticationProcessingFilter requires an authentication manager.
     }
