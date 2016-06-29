@@ -1,9 +1,14 @@
 package com.github.fromi.openidconnect.security;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserInfo {
+public class UserInfo implements UserDetails {
     private final String id;
     private final String name;
     private final String givenName;
@@ -76,4 +81,39 @@ public class UserInfo {
 				+ givenName + ", familyName=" + familyName + ", gender="
 				+ gender + ", picture=" + picture + ", link=" + link + ", email=" + email + ", verifiedEmail=" + verifiedEmail + "]";
 	}
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return null;
+  }
+
+  @Override
+  public String getPassword() {
+    return null;
+  }
+
+  @Override
+  public String getUsername() {
+    return givenName;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }
