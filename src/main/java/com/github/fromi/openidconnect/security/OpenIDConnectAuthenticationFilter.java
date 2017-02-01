@@ -44,6 +44,6 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
         logger.debug("token object:" + token);
    	 	logger.debug("UserInfo:>", userInfoResponseEntity);
    	 	
-        return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
+        return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), token, NO_AUTHORITIES);
     }
 }

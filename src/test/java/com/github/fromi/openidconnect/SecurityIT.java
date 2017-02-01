@@ -72,17 +72,7 @@ public class SecurityIT {
                 .header("Location", startsWith("https://accounts.google.com/o/oauth2/auth"));
     }
     
-    @Test
-    public void testToken() {
-    	
-    	
-    	DefaultOAuth2AccessToken defToken = new DefaultOAuth2AccessToken("ya29.qQKucenHaUWeYJudz1MN5XpFyC4LAM0cvbqohRyVmVi7ai8uq0KW4khewbKuyaLhWO-jfcI");
-    	DefaultOAuth2ClientContext defaultContext = new DefaultOAuth2ClientContext();
-    	defaultContext.setAccessToken(defToken);
-    	OAuth2RestOperations rest = new OAuth2RestTemplate(googleOAuth2Details(), defaultContext);
-        final ResponseEntity<UserInfo> userInfoResponseEntity = rest.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
-        logger.debug("userInfo:>" + userInfoResponseEntity.toString());
-    }
+
     
     public OAuth2ProtectedResourceDetails googleOAuth2Details() {
         AuthorizationCodeResourceDetails googleOAuth2Details = new AuthorizationCodeResourceDetails();
